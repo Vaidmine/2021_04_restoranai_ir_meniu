@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Menu;
+use App\Models\Restaurant;
 use Illuminate\Http\Request;
 use Validator;
 
@@ -15,24 +16,46 @@ class MenuController extends Controller
      */
     public function index(Request $request)
     {
-        // $menus = Menu::all();  //nerusiuota, ima VISKA bet koki tvarka
+        // $menus = Menu::all();  //nerusiuota, ima VISKA bet kokia tvarka
         // $menus = Menu::orderby('title')->get(); // RUSIAVIMAS
         // $menus = Menu::orderby('price')->get(); // RUSIAVIMAS
         // $menus = Menu::orderby('title', 'desc')->get(); // RUSIAVIMAS i kita puse
 
-        if ('title' == $request -> sort){
-            $menus = Menu::orderBy('title')-> get();
-        }
-        elseif ('price' ==$request -> sort) {
-            $menus = Menu::orderBy('price')-> get();
-        }
-        else {
-            $menus = Menu::all();
-        }
-        
-        
+    //RUSIAVIMAS PAGAL TITLE, KAINA arba DEFAULT
+                // if ('title' == $request -> sort){
+                //     $menus = Menu::orderBy('title')-> get();
+                // }
+                // elseif ('price' ==$request -> sort) {
+                //     $menus = Menu::orderBy('price')-> get();
+                // }
+                // else {
+                //     $menus = Menu::all();
+                // }
 
-        return view('menu.index', ['menus' => $menus]);
+                // return view('menu.index', ['menus' => $menus]);
+
+    //FILTRAVIMAS
+            $menus = Menu::all();
+            if($request->menu_id) {
+                $menus = Menu::where('id', $request->menu_id)->get();
+                $filterBy = $request->menu_id;
+                $menus->append(['id' => $request->menu_id]);
+            }
+            else {
+                $menus = Menu::all();
+            }
+            $menus = $menus->sortBy('title');
+            return view('menu.index', [
+                'menus' => $menus,
+                'filterBy' => $filterBy ?? 0,
+                'sortBy' => $sortBy ?? 0
+                ]);
+
+
+
+
+
+       
     }
 
     /**

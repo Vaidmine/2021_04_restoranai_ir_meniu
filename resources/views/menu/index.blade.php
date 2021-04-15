@@ -6,9 +6,30 @@
        <div class="col-md-8">
            <div class="card">
                <div class="card-header"><h2>DISHES LIST</h2>
-                    <a href="{{route('menu.index', ['sort' => 'title'])}}" class="btn btn-outline-primary waves-effect">Sort by title</a>
-                    <a href="{{route('menu.index', ['sort' => 'price'])}}" class="btn btn-outline-primary waves-effect">Sort by price</a>
-                    <a href="{{route('menu.index')}}" class="btn btn-outline-primary waves-effect">Default</a>
+                    <form action="{{route('menu.index')}}" method="get">
+                      <div class="form-group make-inline">
+                        
+ {{-- filtravimas su dropdown --}}
+                        <label>Dishes:</label>
+                        <select class="form-control" name="menu_id">
+                            <option value="0" disabled @if($filterBy == 0) selected @endif>Select Dish</option>
+                          @foreach ($menus as $menu)
+                            <option value="{{$menu->id}}" @if($filterBy == $menu->id) selected @endif>
+                             {{$menu->title}}
+                            </option>
+                          @endforeach
+                        </select>
+                      </div>
+                      <div> 
+                        <button type="submit" class="btn btn-outline-primary waves-effect">Filter</button>
+                        <a href="{{route('menu.index')}}" class="btn btn-outline-primary waves-effect">Clear filter</a>
+                            {{-- <a href="{{route('menu.index', ['sort' => 'title'])}}" class="btn btn-outline-primary waves-effect">Sort by title</a>
+                            <a href="{{route('menu.index', ['sort' => 'price'])}}" class="btn btn-outline-primary waves-effect">Sort by price</a>  --}}
+                            {{-- <a href="{{route('menu.index')}}" class="btn btn-outline-primary waves-effect">Default</a> --}}
+                    </div>
+                    </form>
+
+  
               </div>
 
                <div class="card-body">

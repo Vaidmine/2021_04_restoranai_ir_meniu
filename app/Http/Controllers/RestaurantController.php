@@ -13,10 +13,23 @@ class RestaurantController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
+    public function index(Request $request)
+    {   
         $restaurants = Restaurant::all();
         $menus = Menu::all();
+
+            // RUSIAVIMAS PAGAL TITLE, PATIEKALA arba DEFAULT
+                if ('title' == $request -> sort){
+                    $restaurants = Restaurant::orderBy('title')-> get();
+                }
+                elseif ('restaurantMenu' == $request -> sort) {
+                    // $menus = Menu::orderBy('title')-> get();
+                    $restaurants = Restaurant::where('menu_id', $request->restaurantMenu)->orderBy('title')->get();
+                }
+                else {
+                    $restaurants = Restaurant::all();
+                }
+                
         return view('restaurant.index', ['restaurants' => $restaurants, 'menus' => $menus]);
     }
 
